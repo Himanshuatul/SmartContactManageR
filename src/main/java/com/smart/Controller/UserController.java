@@ -112,23 +112,14 @@ User user=ur.getUserByUserName(uname);
 			{
 				//upload the file to folder and update name in contact
 				
-				//contact.setImage(file.getOriginalFilename());
+				contact.setImage(file.getOriginalFilename());
 				
-				//File saveFile=new ClassPathResource("/static/image").getFile();
-				//Path path=Paths.get(saveFile.getAbsolutePath()+File.separator+file.getOriginalFilename());
+				File saveFile=new ClassPathResource("/static/image").getFile();
+				Path path=Paths.get(saveFile.getAbsolutePath()+File.separator+file.getOriginalFilename());
 				
-			//Files.copy(file.getInputStream(),path,StandardCopyOption.REPLACE_EXISTING);
+			Files.copy(file.getInputStream(),path,StandardCopyOption.REPLACE_EXISTING);
 			
-			String originalFilename = file.getOriginalFilename();
-                String uniqueFilename = System.currentTimeMillis() + "_" + originalFilename; // Or UUID.randomUUID().toString()
-
-                contact.setImage(uniqueFilename);
-
-                // Use a temp directory or configure an external storage path
-                String tempDir = System.getProperty("java.io.tmpdir");
-                Path path = Paths.get(tempDir, uniqueFilename);
-
-                Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+			
 			
 			
 			}
