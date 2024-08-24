@@ -9,6 +9,8 @@ import java.security.Principal;
 import java.util.Map;
 import java.util.Optional;
 
+import com.cloudinary.Cloudinary;
+import com.smart.service.CloudanirayImageService;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -42,6 +44,10 @@ import com.smart.helper.Message;
 @Controller
 @RequestMapping("/user")
 public class UserController {
+
+	@Autowired
+	private CloudanirayImageService cloudanirayImageService;
+
 	@Autowired
 	private UserRepository ur;
 	@Autowired
@@ -114,14 +120,14 @@ User user=ur.getUserByUserName(uname);
 				
 				contact.setImage(file.getOriginalFilename());
 				
-				File saveFile=new ClassPathResource("/static/image").getFile();
-				Path path=Paths.get(saveFile.getAbsolutePath()+File.separator+file.getOriginalFilename());
+				//File saveFile=new ClassPathResource("/static/image").getFile();
+				//Path path=Paths.get(saveFile.getAbsolutePath()+File.separator+file.getOriginalFilename());
 				
-			Files.copy(file.getInputStream(),path,StandardCopyOption.REPLACE_EXISTING);
+			//Files.copy(file.getInputStream(),path,StandardCopyOption.REPLACE_EXISTING);
 			
-			
-			
-			
+			Map data=this.cloudanirayImageService.upload(file);
+
+				contact.setImage(data.get("url").toString());
 			}
 			/*
 			If two files have the same name and you want to handle this situation, you need a strategy to ensure that file names are unique when saving them. Here are a few approaches you can consider:
@@ -281,20 +287,22 @@ else
 			
 			if(!file.isEmpty())
 			{
+
 				//delete old photo
-				File deleteFile=new ClassPathResource("/static/image").getFile();
+				//File deleteFile=new ClassPathResource("/static/image").getFile();
 				
-				File file1=new File(deleteFile,old.getImage());
-				file1.delete();
+				//File file1=new File(deleteFile,old.getImage());
+				//file1.delete();
 				
 				//update new photo
 				
-				File saveFile=new ClassPathResource("/static/image").getFile();
-				Path path=Paths.get(saveFile.getAbsolutePath()+File.separator+file.getOriginalFilename());
-				Files.copy(file.getInputStream(),path,StandardCopyOption.REPLACE_EXISTING);
+				//File saveFile=new ClassPathResource("/static/image").getFile();
+				//Path path=Paths.get(saveFile.getAbsolutePath()+File.separator+file.getOriginalFilename());
+				//Files.copy(file.getInputStream(),path,StandardCopyOption.REPLACE_EXISTING);
 			
-			contact.setImage(file.getOriginalFilename());
-				
+			//contact.setImage(file.getOriginalFilename());
+				Map uploadResult = this.cloudanirayImageService.upload(file);
+				contact.setImage(uploadResult.get("url").toString());
 			
 			}
 			else
